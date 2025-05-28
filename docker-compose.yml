@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=shared_expenses_db
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
   backend:
     build:
       context: ./shared-expenses-api
@@ -11,7 +23,10 @@ services:
       - ./shared-expenses-api:/app
     environment:
       - ENVIRONMENT=development
-    restart: unless-stopped 
+      - DATABASE_URL=postgresql+asyncpg://user:password@db:5432/shared_expenses_db
+    depends_on:
+      - db
+    restart: unless-stopped
 
   frontend:
     build:
@@ -21,4 +36,7 @@ services:
       - "4200:80"
     depends_on:
       - backend
-    restart: unless-stopped 
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
