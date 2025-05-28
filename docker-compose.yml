@@ -9,8 +9,7 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=shared_expenses_db
-    ports:
-      - "5432:5432"
+    # Port 5432 is not exposed to the host, only accessible within the Docker network
     restart: unless-stopped
 
   backend:
