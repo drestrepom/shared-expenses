@@ -1,0 +1,31 @@
+name: Python CI
+
+on: [push]
+
+jobs:
+  lint-and-type-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./shared-expenses-api
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install poetry
+        run: |
+          pip install poetry
+      - name: Install dependencies
+        run: |
+          poetry install
+      - name: Format with ruff
+        run: |
+          poetry run ruff format --check --config ruff.toml
+      - name: Lint with ruff
+        run: |
+          poetry run ruff check --config ruff.toml
+      - name: Mypy check
+        run: |
+          poetry run mypy --config-file mypy.ini .
