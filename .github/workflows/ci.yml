@@ -19,10 +19,10 @@ jobs:
           pip install poetry
       - name: Install dependencies
         run: |
-          poetry install
+          poetry install --no-root
       - name: Format with ruff
         run: |
-          poetry run ruff format --check --config ruff.toml
+          poetry run ruff format --check --config ruff.toml --diff
       - name: Lint with ruff
         run: |
           poetry run ruff check --config ruff.toml
