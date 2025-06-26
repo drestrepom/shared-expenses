@@ -18,7 +18,8 @@ pkgs.writeShellApplication {
     npm ci --prefer-offline --no-audit --progress=false
 
     # Build de producción (sin prompts interactivos)
-    CI=true npx --yes ng build --configuration=production
+    CI=true npx --yes ng build --configuration=production \
+      --define="DB_API_HOST=\"''${DB_API_HOST}\""
 
     # Sincronizar únicamente el contenido estático (carpeta browser) al bucket S3
     aws s3 sync dist/frontend/browser s3://shared-expenses-frontend-test-bucket --delete
