@@ -5,7 +5,7 @@
     flake-parts.url =
       "github:hercules-ci/flake-parts/f4330d22f1c5d2ba72d3d22df5597d123fdb60a9?shallow=1";
     nixpkgs.url =
-      "github:nixos/nixpkgs/11cb3517b3af6af300dd6c055aeda73c9bf52c48?shallow=1";
+      "github:nixos/nixpkgs/ab472a7a8fcfd7c778729e7d7c8c3a9586a7cded?shallow=1";
   };
 
   outputs = inputs:
