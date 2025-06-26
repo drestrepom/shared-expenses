@@ -5,8 +5,6 @@ on:
   workflow_dispatch:
 jobs:
   infra-apply:
-    outputs:
-      public_api_url: ${{ steps.infra-apply.outputs.public_api_url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,8 +24,6 @@ jobs:
         run: "rm -f ~/.config/sops/age/keys.txt || true \n"
   front-deploy:
     runs-on: ubuntu-latest
-    env:
-      PUBLIC_API_URL: ${{ needs.infra-apply.outputs.public_api_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v31

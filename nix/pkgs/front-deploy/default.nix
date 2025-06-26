@@ -6,12 +6,21 @@ pkgs.writeShellApplication {
     pkgs.awscli2
     pkgs.sops
     pkgs.age
+    pkgs.jq
+    pkgs.terraform
   ];
   text = ''
     set -o allexport
     eval "$(sops -d --output-type dotenv secrets.yaml)"
     set +o allexport
 
+    pushd infra
+    terraform output -json > tfout.json
+    DB_API_HOST="https://$(jq -r '.apprunner_service_url.value' tfout.json)"
+    echo "$DB_API_HOST"	
+    rm -f tfout.json
+    popd
+  
     pushd frontend
 
     # Instalar dependencias de manera reproducible
