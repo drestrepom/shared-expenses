@@ -1,4 +1,11 @@
 terraform {
+  backend "s3" {
+    bucket         = "shared-expenses-api-tfstate"
+    key            = "terraform.tfstate"
+    region         = "us-west-2"
+    encrypt        = false
+  }
+
   required_version = ">= 1.3"
 
   required_providers {
@@ -24,6 +31,8 @@ resource "aws_dynamodb_table" "simple_table" {
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "pk"
   range_key    = "sk"
+
+  deletion_protection_enabled = false
 
   attribute {
     name = "pk"

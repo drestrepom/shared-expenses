@@ -6,6 +6,7 @@ pkgs.writeShellApplication {
     pkgs.terraform
     pkgs.tflint
     pkgs.sops
+    pkgs.age
   ];
   text = ''
     # shellcheck disable=SC1091
