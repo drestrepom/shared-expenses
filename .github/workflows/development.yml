@@ -1,32 +1,19 @@
 name: CI
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - main
 jobs:
-  lint-and-type-check:
+  api-lint:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./shared-expenses-api
     steps:
       - uses: actions/checkout@v4
-      - name: Set up python
-        uses: actions/setup-python@v4
+      - uses: cachix/install-nix-action@v31
         with:
-          python-version: '3.11'
-      - name: Install poetry
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Run api lint
         run: |
-          pip install poetry
-      - name: Install dependencies
-        run: |
-          poetry install --no-root
-      - name: Format with ruff
-        run: |
-          poetry run ruff format --check --config ruff.toml --diff
-      - name: Lint with ruff
-        run: |
-          poetry run ruff check --config ruff.toml
-      - name: Mypy check
-        run: |
-          poetry run mypy --config-file mypy.ini .
+          nix run .#api-lint
   infra-plan:
     runs-on: ubuntu-latest
     steps:
@@ -34,12 +21,6 @@ jobs:
       - uses: cachix/install-nix-action@v31
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-      - name: Install Cachix
-        run: |
-          nix-env -iA cachix -f https://cachix.org/api/v1/install &> /dev/null
-      - name: Use Cachix
-        run: |
-          cachix use fluidattacks
       - name: Load Age private key
         run: |
           mkdir -p ~/.config/sops/age
