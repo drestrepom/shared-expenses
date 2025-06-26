@@ -33,7 +33,7 @@ async def get_dynamodb() -> AsyncGenerator[DynamoDBClient, None]:
 
 @app.get("/")
 def read_root() -> dict[str, str]:
-    return {"message": "Bienvenido al backend de gestión de gastos"}
+    return {"message": "Bienvenido al backend de gestión de gastos compartidos"}
 
 
 @app.get("/db-check")

@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     const host = (typeof DB_API_HOST !== 'undefined' && DB_API_HOST) ? DB_API_HOST : '';
     const endpoint = `${host}/db-check`;
     this.http.get(endpoint).subscribe({
-      next: () => (this.dbStatus = 'Conexión exitosa'),
+      next: () => (this.dbStatus = 'Conexión exitosa con el backend'),
       error: () => (this.dbStatus = 'Error de conexión')
     });
   }
