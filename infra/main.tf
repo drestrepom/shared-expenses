@@ -26,6 +26,12 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "ecr_image_name" {
+  description = "Name of the ECR image"
+  type        = string
+  default     = "shared-expenses-backend"
+}
+
 resource "aws_dynamodb_table" "simple_table" {
   name         = "shared-expenses"
   billing_mode = "PAY_PER_REQUEST"
@@ -99,6 +105,23 @@ resource "aws_s3_bucket_website_configuration" "frontend_bucket_website" {
   }
 }
 
+resource "aws_ecr_repository" "backend_repo" {
+  name = "shared-expenses-backend"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+
+  encryption_configuration {
+    encryption_type = "AES256"
+  }
+
+  tags = {
+    Name        = "backend-repo"
+    Environment = "dev"
+  }
+}
+
 output "dynamodb_table_name" {
   description = "The name of the DynamoDB table created"
   value       = aws_dynamodb_table.simple_table.name
@@ -107,4 +130,9 @@ output "dynamodb_table_name" {
 output "frontend_bucket_website_url" {
   description = "URL del sitio web estático en S3 para el frontend"
   value       = aws_s3_bucket_website_configuration.frontend_bucket_website.website_endpoint
+}
+
+output "ecr_repository_url" {
+  description = "URI del repositorio ECR"
+  value       = aws_ecr_repository.backend_repo.repository_url
 }
