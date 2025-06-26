@@ -43,7 +43,7 @@ pkgs.writeShellApplication {
        ruff check --config ruff.toml --fix
      fi
 
-    mypy --config-file mypy.ini .
+    mypy --config-file mypy.ini shared_expenses_api
     popd
   '';
 }

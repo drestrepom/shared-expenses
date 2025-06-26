@@ -1,4 +1,4 @@
 line-length = 100
 indent-width = 4
 target-version = "py311"
-include = ["main.py"]
+include = ["shared_expenses_api/*"]
