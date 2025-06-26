@@ -5,4 +5,5 @@ let
     program = "${package}/bin/${name}";
   };
   apps = pkgs.lib.mapAttrs mkApp self'.packages;
-in apps
+in
+apps

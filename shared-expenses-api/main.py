@@ -15,6 +15,7 @@ engine = create_async_engine(DATABASE_URL, echo=True)
 
 app = FastAPI()
 
+
 # Dependency to get an AsyncSession
 async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSession(engine) as session:
@@ -26,12 +27,14 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
         finally:
             await session.close()
 
+
 @app.get("/")
-def read_root():
+def read_root() -> dict[str, str]:
     return {"message": "Bienvenido al backend de gestión de gastos"}
 
+
 @app.get("/db-check")
-async def db_check(session: AsyncSession = Depends(get_db_session)):
+async def db_check(session: AsyncSession = Depends(get_db_session)) -> dict[str, str]:
     try:
         # Execute a simple query to check the connection
         result = await session.execute(text("SELECT 1"))
@@ -39,7 +42,10 @@ async def db_check(session: AsyncSession = Depends(get_db_session)):
             return {"message": "Database connection successful!"}
         else:
             # This case should ideally not be reached if the query is just "SELECT 1"
-            raise HTTPException(status_code=500, detail="Database connection check failed: Unexpected result from SELECT 1")
+            raise HTTPException(
+                status_code=500,
+                detail="Database connection check failed: Unexpected result from SELECT 1",
+            )
     except Exception as e:
         # Log the exception for debugging if you have a logger setup
         # logger.error(f"Database connection error: {e}")
