@@ -186,7 +186,8 @@ resource "aws_iam_policy" "dynamodb_table_policy" {
           "dynamodb:UpdateItem",
           "dynamodb:DeleteItem",
           "dynamodb:Query",
-          "dynamodb:Scan"
+          "dynamodb:Scan",
+          "dynamodb:DescribeTable"
         ],
         Resource = [
           aws_dynamodb_table.simple_table.arn,
@@ -215,7 +216,11 @@ resource "aws_apprunner_service" "backend_service" {
       image_repository_type = "ECR"
 
       image_configuration {
-        port = "8000" # Cambia este puerto si tu contenedor expone uno distinto
+        port = "8000"
+
+        runtime_environment_variables = {
+          ALLOWED_ORIGINS = "http://${aws_s3_bucket_website_configuration.frontend_bucket_website.website_endpoint}"
+        }
       }
     }
 

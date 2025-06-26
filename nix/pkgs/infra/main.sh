@@ -15,6 +15,9 @@ function _apply {
   terraform init
   if test -n "${CI:-}"; then
     terraform apply -auto-approve
+    terraform output -json > tfout.json
+    IP=$(jq -r '.apprunner_service_url.value' tfout.json)
+    echo "public_api_url=$IP" >> $GITHUB_OUTPUT
   else
     terraform apply
   fi
