@@ -45,14 +45,9 @@ jobs:
           mkdir -p ~/.config/sops/age
           echo "${{ secrets.SOPS_AGE_KEY }}" > ~/.config/sops/age/keys.txt
           chmod 600 ~/.config/sops/age/keys.txt
-      - name: Debug AGE key (remove after testing)
-        run: |
-          echo "AGE key file exists: $(test -f ~/.config/sops/age/keys.txt && echo 'YES' || echo 'NO')"
-          echo "AGE key file size: $(wc -c < ~/.config/sops/age/keys.txt) bytes"
-          echo "AGE key starts with: $(head -c 20 ~/.config/sops/age/keys.txt)"
-      - name: Check secrets
-        run: |
-          cat ~/.config/sops/age/keys.txt
-      - name: Ejecuta sifts-infra plan
+      - name: Run infra plan
         run: |
           nix run .#infra -- plan
+      - name: Cleanup secrets
+        if: always()
+        run: "rm -f ~/.config/sops/age/keys.txt || true \n"
