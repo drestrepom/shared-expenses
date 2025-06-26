@@ -1,23 +1,30 @@
-[tool.poetry]
+[project]
 name = "shared-expenses-api"
 version = "0.1.0"
 description = ""
-authors = ["Diego Restrepo Mesa <restrepomesadiego@gmail.com>"]
+authors = [{ name = "Diego Restrepo Mesa", email = "restrepomesadiego@gmail.com" }]
+requires-python = "~=3.11"
 readme = "README.md"
-packages = [{include = "shared_expenses_api"}]
+dependencies = [
+    "fastapi[standard]>=0.115.12,<0.116",
+    "uvicorn>=0.34.2,<0.35",
+    "sqlalchemy>=2.0.41,<3",
+    "asyncpg>=0.30.0,<0.31",
+    "psycopg2-binary>=2.9.10,<3",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-fastapi = {extras = ["standard"], version = "^0.115.12"}
-uvicorn = "^0.34.2"
-sqlalchemy = "^2.0.41"
-asyncpg = "^0.30.0"
-psycopg2-binary = "^2.9.10"
+[dependency-groups]
+dev = [
+    "mypy>=1.15.0,<2",
+    "ruff>=0.11.11,<0.12",
+]
 
-[tool.poetry.group.dev.dependencies]
-mypy = "^1.15.0"
-ruff = "^0.11.11"
+[tool.hatch.build.targets.sdist]
+include = ["shared_expenses_api"]
+
+[tool.hatch.build.targets.wheel]
+include = ["shared_expenses_api"]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
