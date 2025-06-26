@@ -122,6 +122,118 @@ resource "aws_ecr_repository" "backend_repo" {
   }
 }
 
+resource "aws_iam_role" "apprunner_ecr_access_role" {
+  name = "apprunner-ecr-access-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "build.apprunner.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "apprunner-ecr-access-role"
+    Environment = "dev"
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "apprunner_ecr_access_attachment" {
+  role       = aws_iam_role.apprunner_ecr_access_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSAppRunnerServicePolicyForECRAccess"
+}
+
+resource "aws_iam_role" "apprunner_dynamo_access_role" {
+  name = "apprunner-dynamo-access-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "tasks.apprunner.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "apprunner-dynamo-access-role"
+    Environment = "dev"
+  }
+}
+
+resource "aws_iam_policy" "dynamodb_table_policy" {
+  name        = "dynamodb-table-access-policy"
+  description = "Allow runtime access to the shared-expenses DynamoDB table"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:Query",
+          "dynamodb:Scan"
+        ],
+        Resource = [
+          aws_dynamodb_table.simple_table.arn,
+          "${aws_dynamodb_table.simple_table.arn}/*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "apprunner_dynamo_access_attachment" {
+  role       = aws_iam_role.apprunner_dynamo_access_role.name
+  policy_arn = aws_iam_policy.dynamodb_table_policy.arn
+}
+
+resource "aws_apprunner_service" "backend_service" {
+  service_name = "shared-expenses-backend"
+
+  source_configuration {
+    authentication_configuration {
+      access_role_arn = aws_iam_role.apprunner_ecr_access_role.arn
+    }
+
+    image_repository {
+      image_identifier      = "${aws_ecr_repository.backend_repo.repository_url}:latest"
+      image_repository_type = "ECR"
+
+      image_configuration {
+        port = "8000" # Cambia este puerto si tu contenedor expone uno distinto
+      }
+    }
+
+    auto_deployments_enabled = true
+  }
+
+  instance_configuration {
+    cpu    = "1 vCPU"
+    memory = "2 GB"
+    instance_role_arn = aws_iam_role.apprunner_dynamo_access_role.arn
+  }
+
+  tags = {
+    Name        = "backend-apprunner-service"
+    Environment = "dev"
+  }
+}
+
 output "dynamodb_table_name" {
   description = "The name of the DynamoDB table created"
   value       = aws_dynamodb_table.simple_table.name
@@ -135,4 +247,9 @@ output "frontend_bucket_website_url" {
 output "ecr_repository_url" {
   description = "URI del repositorio ECR"
   value       = aws_ecr_repository.backend_repo.repository_url
+}
+
+output "apprunner_service_url" {
+  description = "Public URL App Runner"
+  value       = aws_apprunner_service.backend_service.service_url
 }

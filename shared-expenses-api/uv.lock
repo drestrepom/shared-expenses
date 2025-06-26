@@ -238,6 +238,18 @@ wheels = [
 ]
 
 [[package]]
+name = "botocore-stubs"
+version = "1.38.30"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "types-awscrt" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b2/df/9bf9f6346daf1cbcb736a12417efe025ed63d72a015799f4e8f26a823b93/botocore_stubs-1.38.30.tar.gz", hash = "sha256:291d7bf39a316c00a8a55b7255489b02c0cea1a343482e7784e8d1e235bae995", size = 42299, upload-time = "2025-06-04T20:14:50.799Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/98/71/cc9bc544489160cbacc8472b70ba0f9b93385628ed8bd0f673855b7ceeb7/botocore_stubs-1.38.30-py3-none-any.whl", hash = "sha256:2efb8bdf36504aff596c670d875d8f7dd15205277c15c4cea54afdba8200c266", size = 65628, upload-time = "2025-06-04T20:14:48.089Z" },
+]
+
+[[package]]
 name = "certifi"
 version = "2025.4.26"
 source = { registry = "https://pypi.org/simple" }
@@ -1090,6 +1102,7 @@ dependencies = [
 dev = [
     { name = "mypy" },
     { name = "ruff" },
+    { name = "types-aioboto3", extra = ["dynamodb"] },
 ]
 
 [package.metadata]
@@ -1106,6 +1119,7 @@ requires-dist = [
 dev = [
     { name = "mypy", specifier = ">=1.15.0,<2" },
     { name = "ruff", specifier = ">=0.11.11,<0.12" },
+    { name = "types-aioboto3", extras = ["dynamodb"], specifier = "==14.3.0" },
 ]
 
 [[package]]
@@ -1197,6 +1211,69 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c5/8c/7d682431efca5fd290017663ea4588bf6f2c6aad085c7f108c5dbc316e70/typer-0.16.0.tar.gz", hash = "sha256:af377ffaee1dbe37ae9440cb4e8f11686ea5ce4e9bae01b84ae7c63b87f1dd3b", size = 102625, upload-time = "2025-05-26T14:30:31.824Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/76/42/3efaf858001d2c2913de7f354563e3a3a2f0decae3efe98427125a8f441e/typer-0.16.0-py3-none-any.whl", hash = "sha256:1f79bed11d4d02d4310e3c1b7ba594183bcedb0ac73b27a9e5f28f6fb5b98855", size = 46317, upload-time = "2025-05-26T14:30:30.523Z" },
+]
+
+[[package]]
+name = "types-aioboto3"
+version = "14.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "botocore-stubs" },
+    { name = "types-aiobotocore" },
+    { name = "types-s3transfer" },
+    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8e/00/e6abcb83ff3e0f9b909ef84f1674bdb31c00f35d8c9e74e7487fa22c6d17/types_aioboto3-14.3.0.tar.gz", hash = "sha256:ba722ed63c54427e99bb3439c212576caecb42fa63aac593b6f63d60d42de170", size = 80279, upload-time = "2025-05-08T01:18:02.839Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d4/f9/dbf7c43157e1d7ce63db163c567514eb719c8513973f6041372377d05478/types_aioboto3-14.3.0-py3-none-any.whl", hash = "sha256:017a9916e9ffdb48b5961d3f32d7a67cebb8c46dad53c778d2bca0fc47ac9087", size = 42091, upload-time = "2025-05-08T01:13:07.888Z" },
+]
+
+[package.optional-dependencies]
+dynamodb = [
+    { name = "types-aiobotocore-dynamodb" },
+]
+
+[[package]]
+name = "types-aiobotocore"
+version = "2.23.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "botocore-stubs" },
+    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d6/2b/1e039d61079d9f4fd9011eff2aab0ecd1ec1fe16eb9a1c08720b4686248f/types_aiobotocore-2.23.0.tar.gz", hash = "sha256:d363a584726b9582e18cadbed9f88053ac4b488373e0e643d292b57b2f182ac8", size = 84697, upload-time = "2025-06-13T01:59:52.009Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4c/4b/821a589e7d02f2ceef9e627139cf0c6c8b554d8e7c44117006f1f2a46c5d/types_aiobotocore-2.23.0-py3-none-any.whl", hash = "sha256:f62d9a58d730bbde825355feedb045713b6de2feab4c1b68b071afd1da60dea8", size = 52122, upload-time = "2025-06-13T01:59:46.918Z" },
+]
+
+[[package]]
+name = "types-aiobotocore-dynamodb"
+version = "2.22.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c6/0f/d1998e0026c706faf373f14e086ce0893ca37ef9838964bae7b8ecfe27be/types_aiobotocore_dynamodb-2.22.0.tar.gz", hash = "sha256:a506a1046ade4847580b49bb5944364ced32fa196fb77e36fd7c250bb55867a3", size = 47605, upload-time = "2025-05-02T01:34:38.35Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0b/1c/f91ccc0d320db81331ac9e58ab0d415f4785f085f9e64c73db495f7ffbb7/types_aiobotocore_dynamodb-2.22.0-py3-none-any.whl", hash = "sha256:64c9b345348956c721cf694a935a44d52b8ffaae874a9061f9ccff9f787ea088", size = 57364, upload-time = "2025-05-02T01:34:37.335Z" },
+]
+
+[[package]]
+name = "types-awscrt"
+version = "0.27.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/36/6c/583522cfb3c330e92e726af517a91c13247e555e021791a60f1b03c6ff16/types_awscrt-0.27.2.tar.gz", hash = "sha256:acd04f57119eb15626ab0ba9157fc24672421de56e7bd7b9f61681fedee44e91", size = 16304, upload-time = "2025-05-16T03:10:08.712Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4c/82/1ee2e5c9d28deac086ab3a6ff07c8bc393ef013a083f546c623699881715/types_awscrt-0.27.2-py3-none-any.whl", hash = "sha256:49a045f25bbd5ad2865f314512afced933aed35ddbafc252e2268efa8a787e4e", size = 37761, upload-time = "2025-05-16T03:10:07.466Z" },
+]
+
+[[package]]
+name = "types-s3transfer"
+version = "0.13.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/42/c1/45038f259d6741c252801044e184fec4dbaeff939a58f6160d7c32bf4975/types_s3transfer-0.13.0.tar.gz", hash = "sha256:203dadcb9865c2f68fb44bc0440e1dc05b79197ba4a641c0976c26c9af75ef52", size = 14175, upload-time = "2025-05-28T02:16:07.614Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c8/5d/6bbe4bf6a79fb727945291aef88b5ecbdba857a603f1bbcf1a6be0d3f442/types_s3transfer-0.13.0-py3-none-any.whl", hash = "sha256:79c8375cbf48a64bff7654c02df1ec4b20d74f8c5672fc13e382f593ca5565b3", size = 19588, upload-time = "2025-05-28T02:16:06.709Z" },
 ]
 
 [[package]]
